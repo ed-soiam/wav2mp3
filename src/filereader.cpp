@@ -37,6 +37,7 @@ void FileReader::start()
 void FileReader::stop()
 {
     m_files.clear();
+    m_dataItems.clear();
     if (m_thread)
     {
         m_finished = true;
@@ -54,6 +55,7 @@ bool FileReader::isFinished() const
 void FileReader::threadWorker()
 {
     m_files.clear();
+    m_dataItems.clear();
     m_finished = false;
     //get names of all files with appropriate extension
     fs::path path(m_path);
@@ -90,6 +92,8 @@ void FileReader::threadWorker()
 
         auto data = read(*m_files.begin());
 
+        //only if read operation is successful
+        if (!data->second.empty())
         {//lock mutex only for push operation
             std::unique_lock<std::mutex> lock(m_mutex);
             m_dataItems.push_back(std::move(data));
@@ -114,15 +118,14 @@ void FileReader::processData(std::unique_ptr<DataItem> & data)
     if (m_dataItems.empty())
         return;
     data = std::make_unique<DataItem>();
-    std::swap(*data, *m_dataItems.begin());
+    std::swap(data, *m_dataItems.begin());
     m_dataItems.erase(m_dataItems.begin());
     m_innerCondVar.notify_one();
 }
 
-DataItem FileReader::read(const std::string & file)
+DataItemUPtr FileReader::read(const std::string & file)
 {
-    DataItem result;
-    result.first = file;
+    DataItemUPtr result = std::make_unique<DataItem>(file, DataVector());
     uintmax_t size = 0;
     try
     {
@@ -144,11 +147,11 @@ DataItem FileReader::read(const std::string & file)
         return result;
     }
 
-    result.second.resize(size);
+    result->second.resize(size);
 
-    if(!ifs.read(result.second.data(), static_cast<ptrdiff_t>(result.second.size())))
+    if(!ifs.read(result->second.data(), static_cast<ptrdiff_t>(result->second.size())))
     {
-        result.second.clear();
+        result->second.clear();
         std::cout << "can not read file " << file << std::endl;
     }
     std::cout << "file " << file << " size=" << size << std::endl;

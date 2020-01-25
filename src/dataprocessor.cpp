@@ -52,6 +52,5 @@ void DataProcessor::processData(std::unique_ptr<buffered_io::DataItem> data)
     m_out->processData(data);
     std::this_thread::sleep_for(10s);
     m_curThreads--;
-    std::cout << "Threads: " << m_curThreads << ", completed task file " << data->first << std::endl;
     m_condVar.notify_one();
 }

@@ -7,6 +7,7 @@ namespace buffered_io {
 
 using DataVector = std::vector<char>;
 using DataItem = std::pair<std::string, DataVector>;
+using DataItemUPtr = std::unique_ptr<DataItem>;
 
 class IODevice
 {

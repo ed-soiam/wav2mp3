@@ -27,12 +27,12 @@ public:
 private:
     void threadWorker();
 
-    DataItem read(const std::string & file);
+    DataItemUPtr read(const std::string & file);
 
     std::string m_path;
     std::string m_extension;
     std::list<std::string> m_files;
-    std::list<DataItem> m_dataItems;
+    std::list<DataItemUPtr> m_dataItems;
     std::atomic<size_t> m_limit = 1;
     std::unique_ptr<std::thread> m_thread;
     std::atomic<bool> m_finished = false;
