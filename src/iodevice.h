@@ -1,6 +1,9 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <memory>
+
+namespace buffered_io {
 
 using DataVector = std::vector<char>;
 using DataItem = std::pair<std::string, DataVector>;
@@ -21,5 +24,6 @@ public:
     //did current device finish all work
     virtual bool isFinished() const = 0;
 
-    virtual void processData(DataItem & data) = 0;
+    virtual void processData(std::unique_ptr<DataItem> & data) = 0;
 };
+} //end namespace

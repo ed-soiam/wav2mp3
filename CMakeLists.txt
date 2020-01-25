@@ -25,6 +25,7 @@ SET(SRC
     src/main.cpp
     src/filereader.cpp
     src/filewriter.cpp
+    src/dataprocessor.cpp
     )
 add_executable(${PROJECT_NAME} ${SRC})
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} pthread stdc++fs liblamefile)

@@ -6,6 +6,7 @@
 #include <condition_variable>
 #include <mutex>
 #include "iodevice.h"
+namespace buffered_io {
 
 class FileReader: public IODevice
 {
@@ -22,7 +23,7 @@ public:
 
     bool isFinished() const override;
 
-    void processData(DataItem & data) override;
+    void processData(std::unique_ptr<DataItem> & data) override;
 private:
     void threadWorker();
 
@@ -40,3 +41,4 @@ private:
     std::condition_variable m_innerCondVar;
     std::condition_variable m_readCondVar;
 };
+} //end of namespace

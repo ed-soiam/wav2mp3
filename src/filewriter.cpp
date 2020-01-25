@@ -1,6 +1,8 @@
 #include "filewriter.h"
 
-FileWriter::FileWriter()
+using namespace buffered_io;
+
+FileWriter::FileWriter(const std::string & path, const std::string & extension)
 {
 
 }

@@ -3,13 +3,15 @@
 #include <algorithm>
 #include <fstream>
 #include <cstring>
+
 namespace fs = std::experimental::filesystem;
+using namespace buffered_io;
+
 FileReader::FileReader(const std::string & path, const std::string & extension):
     m_extension(extension)
 {
     std::transform(m_extension.begin(), m_extension.end(), m_extension.begin(), ::tolower);
     setPath(path);
-
 }
 
 FileReader::~FileReader()
@@ -74,8 +76,18 @@ void FileReader::threadWorker()
             m_innerCondVar.wait(lock);
             continue;
         }
+
+        //if no files to read, just wait while someone read all remained data
         if (m_files.empty())
-            break;
+        {
+            //if all data is read, exit thread and mark device as finished
+            if (m_dataItems.empty())
+                break;
+            std::unique_lock<std::mutex> lock(m_mutex);
+            m_innerCondVar.wait(lock);
+            continue;
+        }
+
         auto data = read(*m_files.begin());
 
         {//lock mutex only for push operation
@@ -93,17 +105,16 @@ void FileReader::threadWorker()
     m_readCondVar.notify_all();
 }
 
-void FileReader::processData(DataItem & data)
+void FileReader::processData(std::unique_ptr<DataItem> & data)
 {
     std::unique_lock<std::mutex> lock(m_mutex);
-    m_readCondVar.wait(lock);
+    //wait only if there is no data and reader hasn't loaded all files yet
+    if (m_dataItems.empty() && !isFinished())
+        m_readCondVar.wait(lock);
     if (m_dataItems.empty())
-    {
-        data.first.clear();
-        data.second.clear();
         return;
-    }
-    std::swap(data, *m_dataItems.begin());
+    data = std::make_unique<DataItem>();
+    std::swap(*data, *m_dataItems.begin());
     m_dataItems.erase(m_dataItems.begin());
     m_innerCondVar.notify_one();
 }
