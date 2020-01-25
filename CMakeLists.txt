@@ -17,14 +17,17 @@ ExternalProject_Add(lame
     INSTALL_COMMAND     echo Skipping install step for lame
 )
 ExternalProject_Get_Property(lame SOURCE_DIR)
+#SET(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib/lame)
 SET(liblamefile_dir "${SOURCE_DIR}/libmp3lame/.libs")
 ADD_LIBRARY(liblamefile STATIC IMPORTED)
 SET_PROPERTY(TARGET liblamefile PROPERTY IMPORTED_LOCATION "${liblamefile_dir}/libmp3lame.a")
 SET(SRC
     src/main.cpp
+    src/filereader.cpp
+    src/filewriter.cpp
     )
 add_executable(${PROJECT_NAME} ${SRC})
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} pthread liblamefile)
+TARGET_LINK_LIBRARIES(${PROJECT_NAME} pthread stdc++fs liblamefile)
 
 
 
