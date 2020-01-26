@@ -13,7 +13,7 @@ int main(int argc, char **argv)
     }
 
     //thread count approximating
-    auto threads = 1;//std::thread::hardware_concurrency();
+    auto threads = std::thread::hardware_concurrency();
     if (threads == 0)
         threads = 16;
 
