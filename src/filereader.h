@@ -7,7 +7,14 @@
 #include <mutex>
 #include "iodevice.h"
 namespace buffered_io {
-
+/* FileReader object is used for reading files with specific extension
+ * from specific folder in his own thread.
+ * FileReader stores limited amount of files in his memory(for memory usage reduction)
+ * and caches new file only when other object gets stored file from FileReader
+ * Usage: create FileReader object, call "setBufferLimit" to limit amount of files
+ * that should be cached, call "start", call "processData" and "isFinished" to get
+ * data and monitor FileReader state.
+ */
 class FileReader: public IODevice
 {
 public:

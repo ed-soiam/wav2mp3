@@ -18,11 +18,22 @@ int main(int argc, char **argv)
         threads = 16;
 
     auto startTime = std::chrono::system_clock::now();
-    DataProcessor dp(std::make_unique<buffered_io::FileReader>(argv[1]),
-            std::make_unique<buffered_io::FileWriter>(argv[1]), threads);
-    dp.start();
+    try {
+        DataProcessor dp(std::make_unique<buffered_io::FileReader>(argv[1]),
+                std::make_unique<buffered_io::FileWriter>(argv[1]), threads);
+        dp.start();
+    }
+    catch (std::exception & e)
+    {
+        std::cout << e.what() << std::endl;
+        std::cout << "abnormal exit from application\n";
+        return 1;
+    }
 
-    //19908ms for uncached(1,6Gb), 17316ms when cached
+
+    //171469ms for 1,6Gb Wav data, 44100Hz, 4 threads at intel i5-6200U CPU @ 2.30GHz
+    //172390ms for 1,6Gb Wav data, 44100Hz, 8 threads at intel i5-6200U CPU @ 2.30GHz
+
     std::cout << "time elapsed from start: " <<
                  std::chrono::duration_cast<std::chrono::milliseconds>
                  (std::chrono::system_clock::now() - startTime).count() <<
