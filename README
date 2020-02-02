@@ -1,4 +1,6 @@
-Wav To MP3 project is used to conver stereo wav files(16 bit samples) to mp3 files. It converts all WAVE files in special folder, that is set up by user during program launch. Program results are also stored in the same folder.
+Wav To MP3 project is used for conversion of stereo wave files(16 bit samples) to mp3 files. 
+It converts all WAVE files from specific folder, that is set up by user during program launch. 
+Program results are also stored in the same folder.
 
 Installation notes:
 
