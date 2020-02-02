@@ -1,6 +1,8 @@
 # This file is used to ignore files which are generated
 # ----------------------------------------------------------------------------
 lib/*
+!lib/config.h
+!lib/lame.vcxproj
 *~
 *.autosave
 *.a
@@ -57,7 +59,6 @@ Thumbs.db
 *.ncb
 *.sdf
 *.opensdf
-*.vcxproj
 *vcxproj.*
 
 # MinGW generated files
