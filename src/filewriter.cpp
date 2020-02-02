@@ -1,9 +1,9 @@
-#include <experimental/filesystem>
+#include <filesystem>
 #include <fstream>
 #include "filewriter.h"
 
 using namespace buffered_io;
-namespace fs = std::experimental::filesystem;
+namespace fs = std::filesystem;
 
 FileWriter::FileWriter(const std::string & path, const std::string & extension):
     m_extension(extension)
