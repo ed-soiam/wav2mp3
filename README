@@ -1,0 +1,16 @@
+Wav To MP3 project is used to conver stereo wav files(16 bit samples) to mp3 files. It converts all WAVE files in special folder, that is set up by user during program launch. Program results are also stored in the same folder.
+
+Installation notes:
+
+I. Linux, BSD:
+1. Install subversion, cmake
+2. Go to console and cd PROJECT_FOLDER
+3. cmake ./CMakeFiles.txt
+4. make
+
+II. Windows
+1. Install tortoiseSVN: select "Install command line client tools" option during installation process (for cloning sources of latest lame through command line)
+2. Install at least  "Build Tools for Visual Studio". Also you can install Visual Studio C++.
+3. From console set up build environment "BUILD_TOOLS_OR_VISUAL_STUDIO_INTSTALL_DIR\VC\Auxiliary\Build\vcvars64.bat"
+4. run cmake.exe ./CMakeFiles.txt at PROJECT_FOLDER\win folder
+5. run Msbuild.exe  ALL_BUILD.vcxproj

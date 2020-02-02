@@ -1,10 +1,10 @@
 #include "filereader.h"
-#include <experimental/filesystem>
+#include <filesystem>
 #include <algorithm>
 #include <fstream>
 #include <cstring>
 
-namespace fs = std::experimental::filesystem;
+namespace fs = std::filesystem;
 using namespace buffered_io;
 
 FileReader::FileReader(const std::string & path, const std::string & extension):
@@ -62,11 +62,11 @@ void FileReader::threadWorker()
     for (const auto & file : fs::directory_iterator(path))
         if (fs::is_regular_file(file))
         {
-            std::string extension = file.path().extension();
+            std::string extension = file.path().extension().string();
             std::transform(extension.begin(), extension.end(),
                            extension.begin(), ::tolower);
             if (m_extension == extension)
-                m_files.push_back(file.path());
+                m_files.push_back(file.path().string());
         }
 
     while (!m_finished)
